@@ -1,34 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { CredentialsService } from './credentials.service';
 import { CreateCredentialDto } from './dto/create-credential.dto';
-import { UpdateCredentialDto } from './dto/update-credential.dto';
+import { AuthGuard } from '../guards/auth.guard';
+import { User } from '../decorators/user.decorator';
+import { Users } from '@prisma/client';
 
 @Controller('credentials')
+@UseGuards(AuthGuard)
 export class CredentialsController {
   constructor(private readonly credentialsService: CredentialsService) {}
 
   @Post()
-  create(@Body() createCredentialDto: CreateCredentialDto) {
-    return this.credentialsService.create(createCredentialDto);
+  create(
+    @Body() createCredentialDto: CreateCredentialDto,
+    @User() user: Users,
+  ) {
+    return this.credentialsService.create(user, createCredentialDto);
   }
 
   @Get()
-  findAll() {
-    return this.credentialsService.findAll();
+  findAll(@User() user: Users) {
+    return this.credentialsService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.credentialsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCredentialDto: UpdateCredentialDto) {
-    return this.credentialsService.update(+id, updateCredentialDto);
+  findOne(@Param('id') id: string, @User() user: Users) {
+    return this.credentialsService.findOne(+id, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.credentialsService.remove(+id);
+  remove(@Param('id') id: string, @User() user: Users) {
+    return this.credentialsService.remove(+id, user);
   }
 }

@@ -1,26 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersRepository } from './users.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly usersRepository: UsersRepository) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.usersRepository.findByEmail(createUserDto.email);
+    if (user) throw new ConflictException('email already in use!');
+
+    return await this.usersRepository.create(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async signIn(createUserDto: CreateUserDto) {
+    const user = await this.usersRepository.findByEmail(createUserDto.email);
+    const valid = bcrypt.compareSync(createUserDto.password, user.password);
+
+    if (!user || !valid)
+      throw new UnauthorizedException('Invalid email or password!');
+
+    return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async getUserById(id: number) {
+    return await this.usersRepository.findById(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async deleteAll(id: number) {
+    return await this.usersRepository.deleteAll(id);
   }
 }
