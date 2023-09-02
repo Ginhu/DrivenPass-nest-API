@@ -20,10 +20,10 @@ export class UsersService {
 
   async signIn(createUserDto: CreateUserDto) {
     const user = await this.usersRepository.findByEmail(createUserDto.email);
+    if (!user) throw new UnauthorizedException('Invalid email or password!');
     const valid = bcrypt.compareSync(createUserDto.password, user.password);
 
-    if (!user || !valid)
-      throw new UnauthorizedException('Invalid email or password!');
+    if (!valid) throw new UnauthorizedException('Invalid email or password!');
 
     return user;
   }
