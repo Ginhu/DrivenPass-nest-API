@@ -76,7 +76,7 @@ describe('Users and Auth (e2e)', () => {
 
       await request(app.getHttpServer())
         .post('/auth/sign-in')
-        .send({ email: user.Infos.email, password: user.Infos.password })
+        .send({ email: user.email, password: user.password })
         .expect(200);
     });
 
@@ -85,7 +85,7 @@ describe('Users and Auth (e2e)', () => {
 
       await request(app.getHttpServer())
         .post('/auth/sign-in')
-        .send({ email: 'WrongEmail@mail.com', password: user.Infos.password })
+        .send({ email: 'WrongEmail@mail.com', password: user.password })
         .expect(401);
     });
 
@@ -94,7 +94,7 @@ describe('Users and Auth (e2e)', () => {
 
       await request(app.getHttpServer())
         .post('/auth/sign-in')
-        .send({ email: user.Infos.email, password: 'WrongPassword123*' })
+        .send({ email: user.email, password: 'WrongPassword123*' })
         .expect(401);
     });
   });

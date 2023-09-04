@@ -2,6 +2,9 @@ import { UsersService } from '../../src/users/users.service';
 import { UsersRepository } from '../../src/users/users.repository';
 import { UserFactory } from '../factories/user.factory';
 import { PrismaService } from '../../src/prisma/prisma.service';
+import { AuthService } from '../../src/auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { CredentialFactory } from '../factories/credentials.factory';
 
 const prisma: PrismaService = new PrismaService();
 
@@ -13,9 +16,33 @@ export async function cleanDB() {
 }
 
 export async function createUser() {
-  const userService = new UsersService(new UsersRepository(prisma));
+  const usersRepository = new UsersRepository(prisma);
+  const userService = new UsersService(usersRepository);
   const user = new UserFactory();
-  await userService.create(user.Infos);
+  const createdUser = await userService.create(user.Infos);
 
-  return user;
+  return { ...createdUser, password: user.Infos.password };
+}
+
+export async function signIn(user) {
+  const usersRepository = new UsersRepository(prisma);
+  const userService = new UsersService(usersRepository);
+  const jwtService = new JwtService({ secret: process.env.JWT_SECRET });
+
+  const authService = new AuthService(userService, jwtService);
+
+  return await authService.signIn(user);
+}
+
+export async function createCredential(user) {
+  /* const credentialsRepository = new CredentialsRepository(prisma);
+  const credentialService = new CredentialsService(credentialsRepository); */
+  const credential = new CredentialFactory();
+
+  return await prisma.credentials.create({
+    data: {
+      ...credential.infos,
+      usersId: user.id,
+    },
+  });
 }
