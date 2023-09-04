@@ -5,6 +5,8 @@ import { PrismaService } from '../../src/prisma/prisma.service';
 import { AuthService } from '../../src/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { CredentialFactory } from '../factories/credentials.factory';
+import { NotesFactory } from '../factories/notes.factory';
+import { CardFactory } from '../factories/card.factory';
 
 const prisma: PrismaService = new PrismaService();
 
@@ -42,6 +44,28 @@ export async function createCredential(user) {
   return await prisma.credentials.create({
     data: {
       ...credential.infos,
+      usersId: user.id,
+    },
+  });
+}
+
+export async function createNote(user) {
+  const note = new NotesFactory();
+
+  return await prisma.notes.create({
+    data: {
+      ...note.infos,
+      usersId: user.id,
+    },
+  });
+}
+
+export async function createCard(user) {
+  const card = new CardFactory();
+
+  return await prisma.cards.create({
+    data: {
+      ...card.infos,
       usersId: user.id,
     },
   });

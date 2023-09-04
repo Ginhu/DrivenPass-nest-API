@@ -36,7 +36,7 @@ export class CardsRepository {
         cvc: createCardDto.cvc,
         expirationDate: new Date(createCardDto.expirationDate),
         password: this.cryptr.encrypt(createCardDto.password),
-        vitual: createCardDto.virtual,
+        virtual: createCardDto.virtual,
         type: createCardDto.type,
         rotulo: createCardDto.rotulo,
         user: {

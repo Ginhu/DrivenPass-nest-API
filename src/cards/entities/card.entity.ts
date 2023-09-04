@@ -1,4 +1,4 @@
-import { Users, cardType } from '@prisma/client';
+import { Users } from '@prisma/client';
 
 export class Card {
   private _user: Users;
@@ -8,7 +8,7 @@ export class Card {
   private _expirationDate: Date;
   private _password: string;
   private _virtual: boolean;
-  private _type: cardType;
+  private _type: string;
   private _rotulo: string;
 
   constructor(
@@ -19,7 +19,7 @@ export class Card {
     expirationDate: Date,
     password: string,
     virtual: boolean,
-    type: cardType,
+    type: string,
     rotulo: string,
   ) {
     this._user = user;

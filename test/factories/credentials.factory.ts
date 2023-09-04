@@ -1,12 +1,14 @@
 import { faker } from '@faker-js/faker';
+import { CreateCredentialDto } from '../../src/credentials/dto/create-credential.dto';
 
-export class CredentialFactory {
-  private url: string;
+export class CredentialFactory extends CreateCredentialDto {
+  /* private url: string;
   private login: string;
   private password: string;
-  private rotulo: string;
+  private rotulo: string; */
 
   constructor() {
+    super();
     this.url = faker.internet.url();
     this.login = faker.internet.userName();
     this.password = faker.internet.password({ length: 8 });

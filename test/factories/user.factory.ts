@@ -13,8 +13,3 @@ export class UserFactory {
     return { email: this.email, password: this.password };
   }
 }
-
-export class UserType {
-  private email: string;
-  private password: string;
-}

@@ -1,4 +1,3 @@
-import { cardType } from '@prisma/client';
 import {
   IsBoolean,
   IsDateString,
@@ -34,7 +33,7 @@ export class CreateCardDto {
 
   @IsNotEmpty()
   @IsString()
-  type: cardType;
+  type: string;
 
   @IsNotEmpty()
   @IsString()

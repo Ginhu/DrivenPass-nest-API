@@ -54,16 +54,11 @@ model Cards {
   cvc            Int
   expirationDate DateTime
   password       String
-  vitual         Boolean
-  type           cardType
+  virtual         Boolean
+  type           String
   rotulo         String
 
   @@unique([usersId, rotulo])
   @@map("cards")
 }
 
-enum cardType {
-  Credito
-  Debito
-  Ambos
-}
