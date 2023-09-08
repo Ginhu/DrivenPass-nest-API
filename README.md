@@ -42,7 +42,7 @@ The following tools and frameworks were used in the construction of the project:
 ```bash
 npm i
 ```
-3. Run the front-end with
+3. Run the back-end with
 ```bash
 npm run start:dev
 ```
